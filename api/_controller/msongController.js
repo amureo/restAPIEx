@@ -53,7 +53,30 @@ const getTotal = async () => {
 
 
 const msongController = {
-    
+    create: async (req) => {
+        const { title, album, artist } = req.body;
+                //body check
+          if (isEmpty(title) || isEmpty(album) || isEmpty(artist)) {
+            return resData(STATUS.E100.result, STATUS.E100.resultDesc, currentTime());
+          }
+        
+        try {
+                //insert
+          const query = `INSERT INTO msong (title, album, artist) VALUES (?,?,?)`;
+          const values = [title, album, artist];
+          const [rows] = await db.execute(query, values);
+          if (rows.affectedRows == 1) {
+            return resData(
+              STATUS.S200.result,
+              STATUS.S200.resultDesc,
+              currentTime()
+            );
+          }
+        } catch (e) {
+          console.log(e.message);
+          return resData(STATUS.E300.result, STATUS.E300.resultDesc, currentTime());
+        }   
+    },
     list: async (req) => {
         const totalCount = await getTotal();
         const list = await getList(req);
@@ -68,6 +91,6 @@ const msongController = {
           return resData(STATUS.S201.result, STATUS.S201.resultDesc, currentTime());
         }
     },
-   
+    
 }
 module.exports = msongController;
