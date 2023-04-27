@@ -91,6 +91,30 @@ const msongController = {
           return resData(STATUS.S201.result, STATUS.S201.resultDesc, currentTime());
         }
     },
-    
+    //update
+    update: async (req) => {
+        const { id } = req.params; // url /로 들어오는것
+        const { title, album, artist } = req.body;
+        if (isEmpty(id) || isEmpty(title) || isEmpty(album) || isEmpty(artist)) {
+        return resData(STATUS.E100.result, STATUS.E100.resultDesc, moment().format('LT'));
+        }
+
+        try {
+        const query = `UPDATE ${TABLE.MSONG} SET title =?, album=?, artist=? WHERE id= ?`;
+        const values = [title, album, artist, id];
+        const [rows] = await db.execute(query, values);
+        if (rows.affectedRows == 1) {
+            return resData(
+            STATUS.S200.result,
+            STATUS.S200.resultDesc,
+            moment().format('LT')
+            );
+        }
+        } catch (e) {
+        console.log(e.message);
+        return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+        }
+    },
+
 }
 module.exports = msongController;

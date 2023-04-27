@@ -11,5 +11,10 @@ router.get('/', async (req,res)=>{
     const result = await todoController.list(req);
     res.json(result);
 });
+// update
+router.put('/:id', async (req,res)=>{
+    const result = await todoController.update(req);
+    res.json(result);
+});
 
 module.exports = router;
