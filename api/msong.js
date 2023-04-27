@@ -16,5 +16,10 @@ router.put('/:id', async (req,res)=>{
     const result = await todoController.update(req);
     res.json(result);
 });
+// delete
+router.delete('/:id', async (req,res)=>{
+    const result = await todoController.delete(req);
+    res.json(result);
+});
 
 module.exports = router;
